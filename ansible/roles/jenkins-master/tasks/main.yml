@@ -1,0 +1,154 @@
+- name: create temp dir
+  file:
+    path: "{{jenkinsMasterTmpDir}}"
+    state: directory
+  tags: [jenkins-master]
+
+- name: template dockerfile
+  template:
+    src: Dockerfile
+    dest: "{{jenkinsMasterTmpDir}}/"
+  tags: [jenkins-master]
+
+- name: copy dockerfile context
+  copy:
+    src: "{{item}}"
+    dest: "{{jenkinsMasterTmpDir}}/"
+  loop: "{{dockerfileContext}}"
+  tags: [jenkins-master]
+
+- name: build docker image
+  docker_image:
+    name: "jenkins-master"
+    path: "{{jenkinsMasterTmpDir}}"
+  register: jenkinsMasterBuildImageRes
+  tags: [jenkins-master]
+
+- name: get docker group id
+  import_role:
+    name: system
+    tasks_from: groupid
+  vars:
+    groupName: docker
+    groupVar: dockerGroupId
+  tags: [jenkins-master]
+
+- name: install container
+  docker_container:
+    name: jenkins-master
+    image: "jenkins-master"
+    detach: yes
+    groups:
+      - "{{dockerGroupId}}"
+    ports:
+      - "{{jenkinsMasterInsecurePort}}:8080"
+    volumes:
+      - jenkins-master-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart_policy: always
+  tags: [jenkins-master]
+
+- name: get container volume mount path
+  import_role:
+    name: docker
+    tasks_from: volume
+  vars:
+    volumeName: jenkins-master-data
+    volumeVar: jenkinsVolumePath
+  tags: [jenkins-master]
+
+- name: wait for jenkins
+  uri:
+    url: "http://{{inventory_hostname}}:{{jenkinsMasterInsecurePort}}"
+    method: POST
+    user: "{{jenkinsAdminUser}}"
+    password: "{{jenkinsAdminPassword}}"
+    force_basic_auth: yes
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 5
+  tags: [jenkins-master]
+
+- name: install plugins
+  uri:
+    url: "http://{{inventory_hostname}}:{{jenkinsMasterInsecurePort}}/pluginManager/installNecessaryPlugins"
+    method: POST
+    user: "{{jenkinsAdminUser}}"
+    password: "{{jenkinsAdminPassword}}"
+    force_basic_auth: yes
+    headers:
+      Content-Type: text/xml
+    body: '<jenkins><install plugin="{{item}}@latest" /></jenkins>'
+    status_code: 200,302
+    creates: "{{jenkinsVolumePath}}/plugins/{{item}}"
+  loop: "{{plugins}}"
+  notify:
+    - "{{restartJenkinsEvent}}"
+  tags: [jenkins-master]
+
+- name: wait for plugins
+  wait_for:
+    path: "{{jenkinsVolumePath}}/plugins/{{item}}"
+  loop: "{{plugins}}"
+  tags: [jenkins-master]
+
+- name: setup templates
+  template:
+    src: "{{item.src}}"
+    dest: "{{jenkinsVolumePath}}/"
+    mode: 0777
+    directory_mode: 0777
+  loop: "{{templates}}"
+  notify:
+    - "{{restartJenkinsEvent}}"
+  tags: [jenkins-master]
+
+- name: setup files
+  copy:
+    src: "{{item.src}}"
+    dest: "{{jenkinsVolumePath}}/"
+    mode: 0777
+    directory_mode: 0777
+  loop: "{{files}}"
+  notify:
+    - "{{restartJenkinsEvent}}"
+  tags: [jenkins-master]
+
+- name: create job directories
+  file:
+    path: "{{jenkinsVolumePath}}/{{jobsFolder}}/{{item.jobName}}/"
+    state: directory
+    mode: 0777
+  loop: "{{jobs}}"
+  tags: [jenkins-master]
+
+- name: setup jobs
+  template:
+    src: "{{item.src}}"
+    dest: "{{jenkinsVolumePath}}/{{jobsFolder}}/{{item.jobName}}/config.xml"
+    mode: 0777
+    directory_mode: 0777
+  loop: "{{jobs}}"
+  notify:
+    - "{{restartJenkinsEvent}}"
+  tags: [jenkins-master]
+
+- name: create agent directories
+  file:
+    path: "{{jenkinsVolumePath}}/{{nodesFolder}}/{{item.agentName}}/"
+    state: directory
+    mode: 0777
+  loop: "{{agents}}"
+  tags: [jenkins-master]
+
+- name: setup agents
+  template:
+    src: "{{item.src}}"
+    dest: "{{jenkinsVolumePath}}/{{nodesFolder}}/{{item.agentName}}/config.xml"
+    mode: 0777
+    directory_mode: 0777
+  loop: "{{agents}}"
+  notify:
+    - "{{restartJenkinsEvent}}"
+  tags: [jenkins-master]

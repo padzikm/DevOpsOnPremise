@@ -1,0 +1,19 @@
+- name: turn on synchronization with ntp
+  command: /usr/bin/timedatectl set-ntp true
+  tags: [system, system-timedate]
+
+- name: enable timesyncd service
+  systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: true
+  tags: [system, system-timedate]
+
+- name: wait for synchronization with ntp
+  pause:
+    seconds: 30
+  tags: [system, system-timedate]
+
+- name: turn off synchronization with ntp
+  command: /usr/bin/timedatectl set-ntp false
+  tags: [system, system-timedate]

@@ -1,0 +1,50 @@
+- name: uninstall old components
+  apt:
+    name: "{{ packages }}"
+    state: absent
+  vars:
+    packages:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+  tags: [docker]
+
+- name: update repo
+  apt:
+    update_cache: yes
+  tags: [docker]
+
+- name: install ca
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - ca-certificates
+  tags: [docker]
+
+- name: get repo key
+  apt_key:
+    url: "https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }}/gpg"
+    state: present
+  tags: [docker]
+
+- name: add repo
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }} {{ ansible_facts['distribution_release'] }} stable"
+    state: present
+    update_cache: yes
+  tags: [docker]
+
+- name: install components
+  apt:
+    name: "{{ packages }}"
+    state: latest   
+  vars:
+    packages:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+  tags: [docker]

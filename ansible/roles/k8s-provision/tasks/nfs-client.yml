@@ -1,0 +1,13 @@
+- name: template nfs-client deploy files
+  template:
+    src: "{{item}}"
+    dest: "/tmp/{{item}}"
+  loop: "{{nfsClientFiles}}"
+  tags: [k8s-provision, k8s-nfs-client]
+
+- name: deploy nfs-client
+  shell: "kubectl apply -f /tmp/{{item}}"
+  become: yes
+  become_user: "{{local_user}}"
+  loop: "{{nfsClientFiles}}"
+  tags: [k8s-provision, k8s-nfs-client]

@@ -1,0 +1,55 @@
+- name: uninstall old components
+  yum:
+    name: "{{ packages }}"
+    state: absent
+  vars:
+    packages:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+  tags: [docker]
+
+- name: update repo
+  yum:
+    update_cache: yes
+  tags: [docker]
+
+- name: install required packages
+  yum:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+  tags: [docker]
+
+- name: add stable repo
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  tags: [docker]
+
+- name: install components
+  yum:
+    name: "{{ packages }}"
+    state: latest   
+  vars:
+    packages:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+  tags: [docker]
+
+- name: start daemon
+  service:
+    name: docker
+    state: started
+  tags: [docker]

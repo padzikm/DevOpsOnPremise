@@ -1,0 +1,16 @@
+- name: install container
+  docker_container:
+    name: chartmuseum
+    image: "chartmuseum/chartmuseum"
+    detach: yes
+    ports:
+      - "{{chartmuseumInsecurePort}}:8080"
+    volumes:
+      - chartmuseum-data:/charts
+    env:
+        STORAGE: local
+        STORAGE_LOCAL_ROOTDIR: /charts
+        BASIC_AUTH_USER: "{{chartmuseumUserName}}"
+        BASIC_AUTH_PASS: "{{chartmuseumUserPass}}"
+    restart_policy: always
+  tags: [chartmuseum]

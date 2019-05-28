@@ -1,0 +1,16 @@
+- hosts: all
+  remote_user: vagrant
+  become: true
+  pre_tasks:
+    - import_role: 
+        name: system
+        tasks_from: timedate
+  roles:
+    - ansible
+    - docker
+    - nexus
+    - chartmuseum
+    - nfs-server
+    - nginx
+    - jenkins-master
+    - jenkins-slave

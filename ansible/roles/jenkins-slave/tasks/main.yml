@@ -1,0 +1,42 @@
+- name: get docker group id
+  import_role:
+    name: system
+    tasks_from: groupid
+  vars:
+    groupName: docker
+    groupVar: dockerGroupId
+  tags: [jenkins-slave]
+
+- name: create temp dir
+  file:
+    path: "{{jenkinsSlaveTmpDir}}"
+    state: directory
+  tags: [jenkins-slave]
+
+- name: template dockerfile
+  template:
+    src: Dockerfile
+    dest: "{{jenkinsSlaveTmpDir}}/Dockerfile"
+  tags: [jenkins-slave]
+
+- name: build docker image
+  docker_image:
+    name: jenkins-slave
+    path: "{{jenkinsSlaveTmpDir}}"
+  tags: [jenkins-slave]
+
+- name: install container
+  docker_container:
+    name: "jenkins-slave{{item}}"
+    image: jenkins-slave
+    detach: yes
+    ports:
+      - "222{{item}}:22"
+    volumes:
+      - "jenkins-slave{{item}}-data:/home/jenkins"
+      - /var/run/docker.sock:/var/run/docker.sock
+    env:
+      JENKINS_SLAVE_SSH_PUBKEY: "{{ jenkinsPublicSshKey }}"
+    restart_policy: always
+  loop: "{{ range(1, jenkinsSlaveCount + 1) | list }}"
+  tags: [jenkins-slave]

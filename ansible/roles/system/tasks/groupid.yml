@@ -1,0 +1,9 @@
+- name: "get {{groupName}} group entry"
+  shell: getent group {{groupName}}
+  register: result
+  tags: [system, system-groupid]
+
+- name: "set {{groupName}} groupId"
+  set_fact:
+    "{{groupVar}}": "{{result.stdout.split(':')[2]}}"
+  tags: [system, system-groupid]

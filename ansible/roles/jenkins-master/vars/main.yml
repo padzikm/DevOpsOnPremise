@@ -1,0 +1,34 @@
+restartJenkinsEvent: "restart jenkins master"
+nodesFolder: "nodes"
+jobsFolder: "jobs"
+
+dockerfileContext:
+  - executors.groovy
+  - default-user.groovy
+
+plugins:
+  - blueocean
+  - workflow-aggregator
+  - ws-cleanup
+  - build-pipeline-plugin
+  - matrix-auth
+  - pam-auth
+  - antisamy-markup-formatter
+  - xunit
+  - timestamper
+  - build-timeout
+  - ssh-slaves
+  - kubernetes
+
+jobs:
+  - { src: "job.xml", jobName: "frontend", branch: "master", projectName: "frontend"}
+
+agents:
+  - { src: "agent.xml", agentName: "docker1", label: "docker", host: "{{inventory_hostname}}", port: "2221", executors: 2}
+  - { src: "agent.xml", agentName: "docker2", label: "docker", host: "{{inventory_hostname}}", port: "2222", executors: 2}
+
+files:
+  - { src: "org.jenkinsci.plugins.workflow.libs.GlobalLibraries.xml", dest: "" }
+
+templates:
+  - { src: "credentials.xml", dest: "" }

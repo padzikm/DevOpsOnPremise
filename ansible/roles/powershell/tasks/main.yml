@@ -1,0 +1,16 @@
+- name: download debian package
+  apt:
+    deb: "https://packages.microsoft.com/config/{{ ansible_facts['distribution'] | lower }}/{{ ansible_facts['distribution_version'] }}/packages-microsoft-prod.deb"
+    state: present
+  tags: [powershell]
+
+- name: update repo
+  apt:
+    update_cache: yes
+  tags: [powershell]
+  
+- name: install
+  apt:
+    name: powershell
+    state: present
+  tags: [powershell]

@@ -1,0 +1,10 @@
+- name: disable swap
+  command: sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab 
+  when: mode == "off"
+  tags: [system, system-swap]
+
+- name: enable swap
+  command: sed -ri '/\sswap\s/s/^#?//' /etc/fstab 
+  when: mode == "on"
+  tags: [system, system-swap]
+  

@@ -1,0 +1,9 @@
+createRepoScripts:
+  - { src: "npm.json", dest: "/tmp/npm.json", scriptName: "npm", repoName: "npm-internal" }
+  - { src: "nuget.json", dest: "/tmp/nuget.json", scriptName: "nuget", repoName: "nuget-internal" }
+  - { src: "docker.json", dest: "/tmp/docker.json", scriptName: "docker", repoName: "docker-internal", httpPort: "{{dockerRegistryInsecurePort}}", httpsPort: "{{dockerRegistrySecurePort}}" }
+
+passwordChangeScripts:
+  - { src: "password.json", dest: "/tmp/password.json", scriptName: "password" }
+
+allScripts: "{{createRepoScripts | union(passwordChangeScripts)}}"

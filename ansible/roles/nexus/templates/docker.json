@@ -1,0 +1,5 @@
+{
+    "name": "{{item.scriptName}}",
+    "type": "groovy",
+    "content": "repository.createDockerHosted('{{item.repoName}}', {{item.httpPort}}, {{item.httpsPort}});"
+}

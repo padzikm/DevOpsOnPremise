@@ -1,0 +1,14 @@
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
+bootstrapTokens:
+localAPIEndpoint:
+  advertiseAddress: {{inventory_hostname}}
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
+apiServer:
+  extraArgs:
+    enable-admission-plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,TaintNodesByCondition,Priority,DefaultTolerationSeconds,DefaultStorageClass,PersistentVolumeClaimResize,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
+networking:
+  podSubnet: {{network_cidr}}
+  serviceSubnet: {{dockerInsecureRegistrySubnet}}

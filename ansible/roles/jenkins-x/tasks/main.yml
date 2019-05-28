@@ -1,0 +1,72 @@
+- name: create directory
+  file:
+    path: "/home/{{local_user}}/.jx/bin"
+    state: directory
+    owner: "{{local_user}}"
+    group: "{{local_user}}"
+  tags: [jenkins-x]
+
+- name: download jx
+  get_url:
+    url: https://github.com/jenkins-x/jx/releases/download/v2.0.180/jx-linux-amd64.tar.gz
+    dest: "/home/{{local_user}}/.jx/bin/jx.tar.gz"
+  tags: [jenkins-x]
+
+- name: extract jx
+  unarchive:
+    src: "/home/{{local_user}}/.jx/bin/jx.tar.gz"
+    remote_src: yes
+    dest: "/home/{{local_user}}/.jx/bin"
+    group: "{{local_user}}"
+    owner: "{{local_user}}"
+  tags: [jenkins-x]
+
+- name: add jx to path
+  lineinfile:
+    path: "/home/{{local_user}}/.bashrc"
+    line: export PATH=$PATH:~/.jx/bin
+    state: present
+    create: yes
+    owner: "{{local_user}}"
+    group: "{{local_user}}"
+  tags: [jenkins-x]
+
+- name: update cache
+  apt:
+    update_cache: yes
+  tags: [jenkins-x]
+
+- name: add repo key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags: [jenkins-x]
+
+- name: add repo
+  apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    update_cache: yes
+  tags: [jenkins-x]
+
+- name: update cache
+  apt:
+    update_cache: yes
+  tags: [jenkins-x]
+
+- name: install components
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - kubectl
+  tags: [jenkins-x]
+
+- name: .kube directory exists
+  file:
+    path: "/home/{{local_user}}/.kube"
+    state: directory
+    owner: "{{local_user}}"
+    group: "{{local_user}}"
+  tags: [jenkins-x]

@@ -1,0 +1,54 @@
+- name: install nfs server
+  apt:
+    name: nfs-kernel-server
+    state: present
+  tags: [nfs, nfs-server]
+
+- name: enable nfs server service
+  service:
+    name: nfs-kernel-server
+    enabled: yes
+    state: reloaded
+  tags: [nfs, nfs-server]
+
+- name: start nfs server service
+  service:
+    name: nfs-kernel-server
+    state: started
+  tags: [nfs, nfs-server]
+
+- name: create shared folder
+  file:
+    path: "{{nfsExportedPath}}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: 0777
+  tags: [nfs, nfs-server]
+
+- name: export shared folder
+  lineinfile:
+    path: /etc/exports
+    line: "{{nfsExportedPath}} *(rw,sync,no_root_squash,no_subtree_check,insecure)"
+    state: present
+  tags: [nfs, nfs-server]
+
+- name: restart nfs server service
+  service:
+    name: nfs-kernel-server
+    state: restarted
+  tags: [nfs, nfs-server]
+
+- name: check ufw status
+  command: ufw status
+  register: ufwStatus
+  tags: [nfs, nfs-server]
+
+- name: enable nfs firewall rule
+  ufw:
+    rule: allow
+    name: nfs
+    from_ip: any
+    to_ip: any
+  when: "'Status: active' in ufwStatus.stdout"
+  tags: [nfs, nfs-server]

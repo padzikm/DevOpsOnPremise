@@ -1,0 +1,20 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<org.jenkinsci.plugins.workflow.libs.GlobalLibraries plugin="workflow-cps-global-lib@2.13">
+  <libraries>
+    <org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
+      <name>shopper</name>
+      <retriever class="org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever">
+        <scm class="org.jenkinsci.plugins.github_branch_source.GitHubSCMSource" plugin="github-branch-source@2.4.2">
+          <id>6f21df9b-21f0-4dae-8ce5-df0d57ce000a</id>
+          <repoOwner>padzikm</repoOwner>
+          <repository>JenkinsLibrary</repository>
+          <traits/>
+        </scm>
+      </retriever>
+      <defaultVersion>master</defaultVersion>
+      <implicit>true</implicit>
+      <allowVersionOverride>true</allowVersionOverride>
+      <includeInChangesets>true</includeInChangesets>
+    </org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
+  </libraries>
+</org.jenkinsci.plugins.workflow.libs.GlobalLibraries>

@@ -1,0 +1,13 @@
+- name: template metallb deploy files
+  template:
+    src: "{{item}}"
+    dest: "/tmp/{{item}}"
+  loop: "{{metallbFiles}}"
+  tags: [k8s-provision, k8s-metallb]
+
+- name: deploy metallb
+  shell: "kubectl apply -f /tmp/{{item}}"
+  become: yes
+  become_user: "{{local_user}}"
+  loop: "{{metallbFiles}}"
+  tags: [k8s-provision, k8s-metallb]

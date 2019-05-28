@@ -1,0 +1,14 @@
+- name: restart jenkins master
+  uri:
+    url: "http://{{inventory_hostname}}:{{jenkinsMasterInsecurePort}}/restart"
+    method: POST
+    user: "{{jenkinsAdminUser}}"
+    password: "{{jenkinsAdminPassword}}"
+    force_basic_auth: yes
+    status_code: 200,302
+  register: result
+  until: result.status == 200 or result.status == 302
+  retries: 10
+  delay: 5
+  listen: "{{restartJenkinsEvent}}"
+  tags: [jenkins-master]

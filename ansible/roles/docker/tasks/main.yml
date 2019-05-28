@@ -1,0 +1,34 @@
+- import_tasks: ubuntu.yml
+  when: ansible_facts["distribution"] == "Ubuntu"
+
+- import_tasks: centos.yml
+  when: ansible_facts["distribution"] == "CentOS"
+
+- name: install sdk for python
+  pip:
+    name: docker
+    state: present
+  tags: [docker]
+
+- name: setup config
+  template:
+    src: "{{ docker_cfg_src }}"
+    dest: "{{ docker_cfg_dest }}"
+  register: setup_docker_config
+  tags: [docker]
+
+- name: "add {{local_user}} to docker group"
+  user:
+    name: "{{local_user}}"
+    groups:
+      - docker
+  register: add_remote_user_to_docker
+  tags: [docker]
+
+- name: restart daemon
+  service:
+    name: docker
+    state: restarted
+  when: setup_docker_config is changed or add_remote_user_to_docker is changed
+  tags: [docker]
+  

@@ -1,0 +1,48 @@
+- name: .kube directory exists
+  file:
+    path: "/home/{{local_user}}/.kube"
+    state: directory
+    owner: "{{local_user}}"
+    group: "{{local_user}}"
+  tags: [k8s-master]
+
+- name: copy config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{local_user}}/.kube/config"
+    remote_src: yes
+    owner: "{{local_user}}"
+    group: "{{local_user}}"
+  tags: [k8s-master]
+
+- name: get calico manifest
+  get_url:
+    url: https://docs.projectcalico.org/v3.7/manifests/calico.yaml
+    dest: /tmp/calico_manifest.yaml
+  tags: [k8s-master]
+
+- name: set calico network_cidr
+  replace:
+    path: /tmp/calico_manifest.yaml
+    regexp: '192.168.0.0/16'
+    replace: '{{network_cidr}}'
+  tags: [k8s-master, k8s-calico]
+
+- name: get indent for calico env
+  shell: "grep 'value: \"autodetect\"' /tmp/calico_manifest.yaml | grep \" \" -o | wc -l"
+  register: indentVar
+  tags: [k8s-master, k8s-calico]
+
+- name: set calico ip autodetection
+  blockinfile:
+    path: /tmp/calico_manifest.yaml
+    state: present
+    insertafter: 'value: "autodetect"'
+    block: "{{calicoConfiguration | indent(((indentVar.stdout | int)-3), True)}}"
+  tags: [k8s-master, k8s-calico]
+
+- name: setup calico
+  shell: kubectl apply -f /tmp/calico_manifest.yaml
+  become: yes
+  become_user: "{{local_user}}"
+  tags: [k8s-master, k8s-calico]

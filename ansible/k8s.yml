@@ -1,0 +1,5 @@
+- import_playbook: k8smaster.yml
+
+- import_playbook: k8snode.yml
+
+- import_playbook: k8sprovision.yml

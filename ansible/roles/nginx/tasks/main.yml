@@ -1,0 +1,18 @@
+- name: template config
+  template:
+    src: "nginx.conf"
+    dest: "/home/{{local_user}}/nginx.conf"
+    mode: 0644
+  tags: [nginx]
+
+- name: install container
+  docker_container:
+    name: nginx
+    image: "nginx"
+    detach: yes
+    ports:
+      - "80:80"
+    volumes:
+      - /tmp/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    restart_policy: always
+  tags: [nginx]

@@ -1,0 +1,11 @@
+- name: install container
+  docker_container:
+    name: registry
+    image: registry:2
+    detach: yes
+    ports:
+      - "{{dockerRegistryInsecurePort}}:5000"
+    volumes:
+      - "{{registryVolumeName}}:/var/lib/registry"
+    restart_policy: always
+  tags: [registry]

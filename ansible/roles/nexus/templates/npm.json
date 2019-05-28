@@ -1,0 +1,5 @@
+{
+    "name": "{{item.scriptName}}",
+    "type": "groovy",
+    "content": "repository.createNugetHosted('{{item.repoName}}');"
+}

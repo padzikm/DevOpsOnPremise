@@ -1,0 +1,15 @@
+- hosts: k8snode
+  remote_user: vagrant
+  become: true
+  tags: [k8s-node-setup]
+  pre_tasks:
+    - import_role:
+        name: system
+        tasks_from: swap
+      vars:
+        mode: "off"
+  roles:
+    - ansible
+    - docker
+    - nfs-client
+    - k8s-node

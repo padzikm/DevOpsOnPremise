@@ -1,0 +1,35 @@
+jenkinsAdminUser: admin
+jenkinsAdminPassword: admin
+jenkinsSlaveCount: 2
+# ssh-keygen -t rsa -C "Jenkins agent key" -f "jenkinsAgent_rsa"
+jenkinsPublicSshKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7pWtVgvRalFHOR3uYlCkncPglFlUQKbTq9j7hSBZfORhA8W/+xZGtAv+TVLuLOkP8Q1CKmxbVHqKJVSW16luaajlUQKLp1d+ztkAjNXtSJsRrBXQbQUMrHoz+JDjda0h2hXw7reWdjD4aZiuJ7J2WU9j4d1Hmga+/MJirBZgysKfVOyqavU/wN8ZpeEBBOS7Gs6k4XA3p8uG5kfLZopCJGRTAz/LFmeHfVxu+jgIV958b9fV7DVK4ofglFGv2bnufd1M/dmbVOSkTdj3Ji348l5c98chSVQ/DP0yN03SBPbdBAY1mTlrPuw66IOFKNqI5RNw7i691n/9xh7phfdhD Jenkins agent key"
+jenkinsPrivateSshKey: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEAu6VrVYL0WpRRzkd7mJQpJ3D4JRZVECm06vY+4UgWXzkYQPFv
+  /sWRrQL/k1S7izpD/ENQipsW1R6iiVUltepbmmo5VECi6dXfs7ZAIzV7UibEawV0
+  G0FDKx6M/iQ43WtIdoV8O63lnYw+GmYrieydllPY+HdR5oGvvzCYqwWYMrCn1Tsq
+  mr1P8DfGaXhAQTkuxrOpOFwN6fLhuZHy2aKQiRkUwM/yxZnh31cbvo4CFfefG/X1
+  ew1SuKH4JRRr9m57n3dTP3Zm1TkpE3Y9yYt+PJeXPfHIUlUPwz9MjdN0gT23QQGN
+  Zk5az7sOuiDhSjaiOUTcO4uvdZ//cYe6YX3YQwIDAQABAoIBAB3nQq+h6ub0dAT3
+  h07NbbGHY0QlxvCIdPhsvaCRKF+Mbb0LvNlRCuITdD86ZZjOdD8jSxaLmJvmAej4
+  1MWkz2xQOUqf8lZpavjstlPmFf0FiI+1ksc1I0sf10A47Yb7rdSVeTLZh5oP22XB
+  mnakaoimXBFckoS1bhh92haHEbYiAmkda2pFMIEjhZ2375B6ORGM0akPvPFvT64I
+  MyXPLAzP9PhjAsHEzR2QKxv4VsHsGz+SlptehWvFDmXPefup69eN5plUr0sFpcjP
+  hxPxn5fdYknVkV7H20dk0DIUOaEoAoMUmbpyqKc97TKfG/uvXPSELzmQXDMFMbHZ
+  paIYquECgYEA+b72yhQzS3j9jCZAC1gMCkBWflxGAs/WOwM+du1w0P5uDDNjLa9k
+  b2IhJPRXBUmrVAwNYfRdrsfkAeLzPyZvrlXzmqAlAO/sL5CEL1x/U6LkpJH79qnc
+  Jckp3qe75C7mFNmF2e6NsUYSyVFovRHhV+xsb2USOUgF20kK/wfeDG0CgYEAwFha
+  0Rc9xGJXxSoU4N/qh/MmR9Xf+HHCa8DR73hxPKZRLc1A9sb/c2lftyd4g46OcjDO
+  o3WyRK5Nvk0ptc4JZy8x/te2XvELEUbPi/BQnUdQ2TLgRKiKUNilw55o2gTYYLw3
+  owTuLY9g+vpowgG8tr4o1G4ptNhdh+UlMFN9KW8CgYBi4q7asobg4kYaIOcI1tLl
+  mDXnEGgUIvDjKtSnyDn8NlGieRJS+3hb9dHDzQ9Lo7C3tZHy8AvL8Y+hA5hmr7RW
+  peevmKsuJNEywBjmm8w6dGvtkXPfZcAqIe13IJjvr3YgWUR7Vs45m9JCbf53pkXA
+  R3dj3/QIRDE1c0VsV1QfPQKBgQCADlLoQgDtbkvhCFM+I9WRDWC/ErU6QwKdmpIq
+  TJWXO2NwiuZlZbdMryr6VVz2uUI85CGu0f0NnL5FpDnQwIuiFtnCQPs52mDz76De
+  GfCRxZkeAbEuBMeRa6twwVYtUGx+etDPx8iKrJp0faKhB2cMgy3LwEwkCqi6gORx
+  eCQsIQKBgQC8ZJcQjHnDzsCBDjofov1/cOd64WHL05HdVCxw/ddfftLdm23LnapI
+  plEAmb9OQwYelVBz4YedQ8M4DLn5wav2o/synBJl8ru4vmjB+sQ0znt0MRg+IMh+
+  cIO86Sh65POi4VV0mv8xJmyJLKobq6FY5OifYnLdbZ1+NguvPJ9kNg==
+  -----END RSA PRIVATE KEY-----
+jenkinsMasterTmpDir: /tmp/jenkins-master-docker
+jenkinsSlaveTmpDir: /tmp/jenkins-slave-docker

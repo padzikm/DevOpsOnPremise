@@ -1,0 +1,57 @@
+- name: update cache
+  apt:
+    update_cache: yes
+  tags: [k8s]
+
+- name: add repo key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags: [k8s]
+
+- name: add repo
+  apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    update_cache: yes
+  tags: [k8s]
+
+- name: update cache
+  apt:
+    update_cache: yes
+  tags: [k8s]
+
+- name: install components
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - kubelet
+      - kubeadm
+      - kubectl
+  tags: [k8s]
+
+- name: prevent upgrades
+  dpkg_selections:
+    name: "{{item}}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
+  tags: [k8s]
+
+- name: ip in kubelet config
+  lineinfile:
+    path: /etc/default/kubelet
+    line: 'KUBELET_EXTRA_ARGS="--node-ip={{inventory_hostname}}"'
+    create: yes
+    state: present
+  tags: [k8s]
+
+- name: restart kubelet
+  service:
+    name: kubelet
+    state: restarted
+  tags: [k8s]

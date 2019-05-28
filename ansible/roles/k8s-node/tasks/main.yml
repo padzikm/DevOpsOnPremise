@@ -1,0 +1,19 @@
+- name: get cluster nodes
+  command: kubectl get nodes
+  register: clusterNodes
+  delegate_to: "{{groups['k8smaster'][0]}}"
+  become: yes
+  become_user: "{{local_user}}"
+  tags: [k8s-node]
+
+- name: join command generate
+  command: kubeadm token create --print-join-command
+  register: joinCommand
+  delegate_to: "{{groups['k8smaster'][0]}}"
+  when: ansible_hostname not in clusterNodes.stdout
+  tags: [k8s-node]
+
+- name: join master
+  command: "{{joinCommand.stdout}}"
+  when: ansible_hostname not in clusterNodes.stdout
+  tags: [k8s-node]
