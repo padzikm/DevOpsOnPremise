@@ -1,5 +1,5 @@
 - hosts: all
-  remote_user: vagrant
+  remote_user: "{{loggedIn_user}}"
   become: true
   pre_tasks:
     - import_role: 

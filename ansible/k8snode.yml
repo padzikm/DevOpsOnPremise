@@ -1,5 +1,5 @@
 - hosts: k8snode
-  remote_user: vagrant
+  remote_user: "{{loggedIn_user}}"
   become: true
   tags: [k8s-node-setup]
   pre_tasks:

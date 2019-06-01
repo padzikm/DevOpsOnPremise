@@ -20,6 +20,7 @@
 - name: "add {{local_user}} to docker group"
   user:
     name: "{{local_user}}"
+    append: yes
     groups:
       - docker
   register: add_remote_user_to_docker

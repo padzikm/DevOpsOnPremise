@@ -1,5 +1,5 @@
 - hosts: k8smaster
-  remote_user: vagrant
+  remote_user: "{{loggedIn_user}}"
   become: true
   tags: [k8s-master-setup]
   pre_tasks:
