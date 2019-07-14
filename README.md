@@ -5,6 +5,7 @@
 - network configured with calico
 - service type loadbalancer available with metallb
 - dynamic persistent volumes provisioning for storageClass "nfs" (default class) available with nfs-client
+- docker available on separate machine
 - jenkins-x available on separate machine
 
 ## CI/CD
@@ -33,9 +34,10 @@
 9) ansible-playbook -i inventory/k8s k8snode.yml -v
 10) ansible-playbook -i inventory/k8s k8sprovision.yml -v
 11) k8s cluster is available via kubectl on dev vm
-12) jenkins-x is available on dev vm
-13) nfs-server is available on dev vm on path /nfs-k8s
-12) dev vm share /vagrant path with host machine - you can copy kubectl config there and setup kubectl on host machine
+12) docker is available on dev vm
+13) jenkins-x is available on dev vm
+14) nfs-server is available on dev vm on path /nfs-k8s
+15) dev vm share /vagrant path with host machine - you can copy kubectl config there and setup kubectl on host machine
 
 ### CI/CD machine
 1) if not running kubernetes adjust disksize for machine in vagrantfile (line d.disksize.size = "100GB") - default is 100gb
