@@ -4,11 +4,11 @@
 - multinode cluster setup with separate master and nodes
 - network configured with calico
 - service type loadbalancer available with metallb
-- persistent volume on demand for persistent volume claim available with nfs-client
+- dynamic persistent volumes provisioning for storageClass "nfs" (default class) available with nfs-client
 - jenkins-x available on separate machine
 
 ## CI/CD
-- jenkins master with 2 connected slaves
+- jenkins master with 2 connected slaves able to build docker images
 - nexus package repository
 - docker and docker repository
 - chartmuseum helm repository
