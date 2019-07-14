@@ -21,6 +21,7 @@
 4) install vagrant plugins:
   - vagrant plugin install vagrant-cachier
   - vagrant plugin install vagrant-vbguest
+  - vagrant plugin install vagrant-disksize
 
 ### Kubernetes cluster
 1) adjust number of nodes in cluster in vagrantfile (line (1..4).each do |i| config.vm.define "k8s-node-#{i}" do |d|) - default is 4 nodes
