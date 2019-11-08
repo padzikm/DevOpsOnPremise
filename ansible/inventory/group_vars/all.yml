@@ -1,7 +1,7 @@
 ansible_ssh_host_key_checking: False
 loggedIn_user: vagrant
 local_user: "{{loggedIn_user}}"
-dockerVersion: "18.09.10"
+dockerVersion: "18.09.9"
 containerdVersion: "1.2.6"
 k8sVersion: "1.16"
 calicoVersion: "3.10"

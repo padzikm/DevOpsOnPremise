@@ -31,7 +31,7 @@
     state: present   
   vars:
     packages:
-        - "docker-ce={{dockerVersion}}"
-        - "docker-ce-cli={{dockerVersion}}"
-        - "containerd.io={{containerdVersion}}"
+        - "docker-ce=5:{{dockerVersion}}*"
+        - "docker-ce-cli=5:{{dockerVersion}}*"
+        - "containerd.io={{containerdVersion}}*"
   tags: [docker]
