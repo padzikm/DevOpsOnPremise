@@ -8,12 +8,16 @@
   template:
     src: Dockerfile
     dest: "{{jenkinsMasterTmpDir}}/"
+    owner: "{{local_user}}"
+    mode: 0644
   tags: [jenkins-master]
 
 - name: copy dockerfile context
   copy:
     src: "{{item}}"
     dest: "{{jenkinsMasterTmpDir}}/"
+    owner: "{{local_user}}"
+    mode: 0644
   loop: "{{dockerfileContext}}"
   tags: [jenkins-master]
 

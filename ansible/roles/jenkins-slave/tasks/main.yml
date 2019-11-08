@@ -17,6 +17,8 @@
   template:
     src: Dockerfile
     dest: "{{jenkinsSlaveTmpDir}}/Dockerfile"
+    owner: "{{local_user}}"
+    mode: 0644
   tags: [jenkins-slave]
 
 - name: build docker image

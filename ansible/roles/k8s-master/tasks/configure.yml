@@ -12,6 +12,7 @@
     dest: "/home/{{local_user}}/.kube/config"
     remote_src: yes
     owner: "{{local_user}}"
+    mode: 0644
     group: "{{local_user}}"
   tags: [k8s-master]
 

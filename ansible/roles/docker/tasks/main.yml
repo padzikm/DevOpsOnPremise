@@ -14,6 +14,8 @@
   template:
     src: "{{ docker_cfg_src }}"
     dest: "{{ docker_cfg_dest }}"
+    owner: "{{local_user}}"
+    mode: 0644
   register: setup_docker_config
   tags: [docker]
 

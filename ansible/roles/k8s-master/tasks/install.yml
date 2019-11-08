@@ -8,6 +8,8 @@
   template:
     src: initConfig.yaml
     dest: "{{tmpFolder}}/"
+    owner: "{{local_user}}"
+    mode: 0644
   tags: [k8s-master]
 
 - name: init kubeadm

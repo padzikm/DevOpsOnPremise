@@ -2,6 +2,8 @@
   template:
     src: "{{item}}"
     dest: "/tmp/{{item}}"
+    owner: "{{local_user}}"
+    mode: 0644
   loop: "{{metallbFiles}}"
   tags: [k8s-provision, k8s-metallb]
 

@@ -2,6 +2,7 @@
   template:
     src: "nginx.conf"
     dest: "/home/{{local_user}}/nginx.conf"
+    owner: "{{local_user}}"
     mode: 0644
   tags: [nginx]
 
