@@ -1,16 +1,3 @@
-- name: uninstall old components
-  apt:
-    name: "{{ packages }}"
-    state: absent
-  vars:
-    packages:
-      - docker
-      - docker-engine
-      - docker.io
-      - containerd
-      - runc
-  tags: [docker]
-
 - name: update repo
   apt:
     update_cache: yes
@@ -41,10 +28,10 @@
 - name: install components
   apt:
     name: "{{ packages }}"
-    state: latest   
+    state: present   
   vars:
     packages:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
+        - "docker-ce={{dockerVersion}}"
+        - "docker-ce-cli={{dockerVersion}}"
+        - "containerd.io={{containerdVersion}}"
   tags: [docker]

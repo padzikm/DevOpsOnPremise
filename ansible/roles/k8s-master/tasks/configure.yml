@@ -18,7 +18,7 @@
 
 - name: get calico manifest
   get_url:
-    url: https://docs.projectcalico.org/v3.7/manifests/calico.yaml
+    url: "https://docs.projectcalico.org/v{{calicoVersion}}/manifests/calico.yaml"
     dest: /tmp/calico_manifest.yaml
   tags: [k8s-master]
 

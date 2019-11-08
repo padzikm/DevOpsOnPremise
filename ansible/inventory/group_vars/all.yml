@@ -1,7 +1,11 @@
 ansible_ssh_host_key_checking: False
 loggedIn_user: vagrant
 local_user: "{{loggedIn_user}}"
-dockerComposeVersion: 1.23.2
+dockerVersion: "18.09.10"
+containerdVersion: "1.2.6"
+k8sVersion: "1.16"
+calicoVersion: "3.10"
+dockerComposeVersion: "1.24.1"
 dockerComposeInstallPath: /usr/local/bin/docker-compose
 dockerRegistryDomain: "192.168.56.89"
 dockerRegistryInsecurePort: 5000
