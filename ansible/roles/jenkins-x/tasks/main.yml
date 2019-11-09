@@ -8,8 +8,10 @@
 
 - name: download jx
   get_url:
-    url: https://github.com/jenkins-x/jx/releases/download/v2.0.180/jx-linux-amd64.tar.gz
+    url: "https://github.com/jenkins-x/jx/releases/download/v{{jenkinsXVersion}}/jx-linux-amd64.tar.gz"
     dest: "/home/{{local_user}}/.jx/bin/jx.tar.gz"
+    owner: "{{local_user}}"
+    group: "{{local_user}}"
   tags: [jenkins-x]
 
 - name: extract jx
@@ -60,7 +62,7 @@
     state: present
   vars:
     packages:
-      - kubectl
+      - "kubectl={{k8sVersion}}*"
   tags: [jenkins-x]
 
 - name: .kube directory exists
