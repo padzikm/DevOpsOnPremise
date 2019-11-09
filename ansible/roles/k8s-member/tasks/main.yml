@@ -27,9 +27,9 @@
     state: present
   vars:
     packages:
-      - "kubelet={{k8sVersion}}"
-      - "kubeadm={{k8sVersion}}"
-      - "kubectl={{k8sVersion}}"
+      - "kubelet={{k8sVersion}}*"
+      - "kubeadm={{k8sVersion}}*"
+      - "kubectl={{k8sVersion}}*"
   tags: [k8s]
 
 - name: prevent upgrades
