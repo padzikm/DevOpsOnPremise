@@ -6,4 +6,3 @@
     - docker
     - docker-compose
     - nfs-server
-    - jenkins-x

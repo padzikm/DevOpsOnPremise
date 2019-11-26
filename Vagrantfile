@@ -2,6 +2,24 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
+    config.vm.define "dev" do |d|
+      if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+        d.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=700,fmode=600"]
+      else
+        d.vm.synced_folder ".", "/vagrant"
+      end
+      d.vm.box = "ubuntu/bionic64"
+      d.vm.hostname = "dev"
+      d.vm.network "private_network", ip: "192.168.56.89"
+      d.disksize.size = "100GB"
+      d.vm.provider "virtualbox" do |v|
+        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]            
+        v.memory = 2048
+        v.cpus = 2
+      end
+      d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+      d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /vagrant/ansible/acs.yml -i /vagrant/ansible/inventory/local -v"
+    end
     config.vm.define "k8s-master" do |d|
       if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
         d.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=700,fmode=600"]
@@ -14,11 +32,11 @@ Vagrant.configure(2) do |config|
       d.disksize.size = "30GB"
       d.vm.provider "virtualbox" do |v|
         v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]     
-        v.memory = 4096
+        v.memory = 2048
         v.cpus = 2
       end
     end
-    (1..5).each do |i|
+    (1..4).each do |i|
       config.vm.define "k8s-node-#{i}" do |d|
         if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
           d.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=700,fmode=600"]
@@ -31,7 +49,7 @@ Vagrant.configure(2) do |config|
         d.disksize.size = "30GB"
         d.vm.provider "virtualbox" do |v|
           v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]     
-          v.memory = 4096
+          v.memory = 2048
           v.cpus = 2
         end
       end
